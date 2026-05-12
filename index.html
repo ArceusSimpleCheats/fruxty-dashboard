@@ -120,14 +120,14 @@
             const token = params.get('access_token');
             if (token) {
                 localStorage.setItem('discord_token', token);
-                window.location.href = '/dashboard.html';
+                window.location.href = '/dashboard';
             }
         }
         
         // Check if already logged in
         const token = localStorage.getItem('discord_token');
-        if (token && window.location.pathname !== '/dashboard.html') {
-            window.location.href = '/dashboard.html';
+        if (token && window.location.pathname !== '/dashboard') {
+            window.location.href = '/dashboard';
         }
     </script>
 </body>
