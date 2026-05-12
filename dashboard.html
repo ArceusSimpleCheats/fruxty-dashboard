@@ -8,40 +8,17 @@
 </head>
 <body>
     <div class="app">
-        <!-- Sidebar -->
         <aside class="sidebar">
-            <div class="logo">
-                <div class="logo-icon">🤖</div>
-                <div class="logo-text">FRUXY</div>
-            </div>
+            <div class="logo">🤖 Fruxty</div>
             <nav class="nav">
-                <a href="#" class="nav-item active" data-page="overview">
-                    <span class="nav-icon">📊</span>
-                    <span>Overview</span>
-                </a>
-                <a href="#" class="nav-item" data-page="servers">
-                    <span class="nav-icon">🖥️</span>
-                    <span>My Servers</span>
-                </a>
-                <a href="#" class="nav-item" data-page="automod">
-                    <span class="nav-icon">🛡️</span>
-                    <span>AutoMod</span>
-                </a>
-                <a href="#" class="nav-item" data-page="voice">
-                    <span class="nav-icon">🎤</span>
-                    <span>Temp Voice</span>
-                </a>
-                <a href="#" class="nav-item" data-page="leveling">
-                    <span class="nav-icon">📈</span>
-                    <span>Leveling</span>
-                </a>
-                <a href="#" class="nav-item" data-page="commands">
-                    <span class="nav-icon">📋</span>
-                    <span>Commands</span>
-                </a>
+                <a href="#" class="nav-item active" data-page="overview">📊 Overview</a>
+                <a href="#" class="nav-item" data-page="servers">🖥️ My Servers</a>
+                <a href="#" class="nav-item" data-page="automod">🛡️ AutoMod</a>
+                <a href="#" class="nav-item" data-page="voice">🎤 Temp Voice</a>
+                <a href="#" class="nav-item" data-page="commands">📋 Commands</a>
             </nav>
             <div class="user-section">
-                <img id="userAvatar" class="user-avatar" src="" alt="Avatar">
+                <img id="userAvatar" class="user-avatar" src="" alt="">
                 <div class="user-info">
                     <div id="userName" class="user-name">Loading...</div>
                     <div id="userDiscrim" class="user-discrim"></div>
@@ -50,151 +27,45 @@
             </div>
         </aside>
 
-        <!-- Main Content -->
         <main class="main">
-            <!-- Overview Page -->
             <div id="overview" class="page active">
                 <h1>Dashboard Overview</h1>
                 <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon">🟢</div>
-                        <div class="stat-info">
-                            <div class="stat-value" id="botStatus">Online</div>
-                            <div class="stat-label">Bot Status</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">📊</div>
-                        <div class="stat-info">
-                            <div class="stat-value" id="serverCount">0</div>
-                            <div class="stat-label">Total Servers</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">🏓</div>
-                        <div class="stat-info">
-                            <div class="stat-value" id="botPing">0ms</div>
-                            <div class="stat-label">Bot Ping</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">📝</div>
-                        <div class="stat-info">
-                            <div class="stat-value" id="commandCount">0</div>
-                            <div class="stat-label">Commands</div>
-                        </div>
-                    </div>
+                    <div class="stat-card"><div class="stat-value" id="botStatus">🟢 Online</div><div class="stat-label">Bot Status</div></div>
+                    <div class="stat-card"><div class="stat-value" id="serverCount">0</div><div class="stat-label">Servers</div></div>
+                    <div class="stat-card"><div class="stat-value" id="botPing">0ms</div><div class="stat-label">Ping</div></div>
                 </div>
-                
                 <div class="quick-actions">
-                    <h3>⚡ Quick Actions</h3>
-                    <div class="action-buttons">
-                        <button onclick="refreshData()" class="action-btn">🔄 Refresh Data</button>
-                        <button onclick="openInvite()" class="action-btn">➕ Invite Bot</button>
-                    </div>
-                </div>
-
-                <div class="info-box">
-                    <h3>🎉 Welcome to Fruxty Dashboard!</h3>
-                    <p>Select a server from "My Servers" to start configuring AutoMod, Temp Voice, and Leveling systems.</p>
+                    <button onclick="refreshData()" class="action-btn">🔄 Refresh</button>
                 </div>
             </div>
 
-            <!-- Servers Page -->
             <div id="servers" class="page">
-                <h1>🖥️ My Servers</h1>
-                <p class="page-desc">Servers where you are the owner and Fruxty Bot is present.</p>
-                <div id="serverList" class="server-grid">
-                    <div class="loading">Loading your servers...</div>
-                </div>
+                <h1>My Servers</h1>
+                <div id="serverList" class="server-grid">Loading...</div>
             </div>
 
-            <!-- AutoMod Page -->
             <div id="automod" class="page">
-                <h1>🛡️ AutoMod Configuration</h1>
-                <div id="automodWarning" class="warning-banner">
-                    ⚠️ Select a server first from the "My Servers" tab
-                </div>
-                <div id="automodSettings" class="settings-panel" style="display: none;">
-                    <div class="setting-group">
-                        <label>🛡️ AutoMod Status</label>
-                        <select id="automodEnabled" class="setting-select">
-                            <option value="true">✅ Enabled - Actively protecting</option>
-                            <option value="false">❌ Disabled - No protection</option>
-                        </select>
-                        <small>When enabled, automatically deletes bad words and spam messages</small>
-                    </div>
-                    <div class="setting-group">
-                        <label>⚙️ Action on Violation</label>
-                        <select id="automodAction" class="setting-select">
-                            <option value="delete">🗑️ Delete Only</option>
-                            <option value="warn">⚠️ Delete + Warn</option>
-                            <option value="timeout">⏰ Delete + Timeout (5 min)</option>
-                        </select>
-                        <small>What happens when someone violates the rules</small>
-                    </div>
-                    <button onclick="saveAutoMod()" class="save-btn">💾 Save AutoMod Settings</button>
+                <h1>AutoMod</h1>
+                <div id="automodWarning" class="warning-banner">Select a server first</div>
+                <div id="automodSettings" style="display:none">
+                    <select id="automodEnabled"><option value="true">Enabled</option><option value="false">Disabled</option></select>
+                    <button onclick="saveAutoMod()" class="save-btn">Save</button>
                 </div>
             </div>
 
-            <!-- Temp Voice Page -->
             <div id="voice" class="page">
-                <h1>🎤 Temp Voice Configuration</h1>
-                <div id="voiceWarning" class="warning-banner">
-                    ⚠️ Select a server first from the "My Servers" tab
-                </div>
-                <div id="voiceSettings" class="settings-panel" style="display: none;">
-                    <div class="info-box" style="margin-bottom: 20px;">
-                        <h4>📖 How Temp Voice Works</h4>
-                        <ul>
-                            <li>Users join the creator channel → Get their own private VC</li>
-                            <li>Channel owner can use: <code>/vc rename</code>, <code>/vc lock</code>, <code>/vc limit</code></li>
-                            <li>Auto-deletes when empty</li>
-                        </ul>
-                    </div>
-                    <button onclick="setupVoice()" class="save-btn">🎤 Setup Temp Voice System</button>
-                </div>
+                <h1>Temp Voice</h1>
+                <div id="voiceWarning" class="warning-banner">Select a server first</div>
+                <button onclick="setupVoice()" class="save-btn">Setup Voice</button>
             </div>
 
-            <!-- Leveling Page -->
-            <div id="leveling" class="page">
-                <h1>📈 Leveling System</h1>
-                <div id="levelingWarning" class="warning-banner">
-                    ⚠️ Select a server first from the "My Servers" tab
-                </div>
-                <div id="levelingSettings" class="settings-panel" style="display: none;">
-                    <div class="setting-group">
-                        <label>📈 Leveling Status</label>
-                        <select id="levelingEnabled" class="setting-select">
-                            <option value="true">✅ Enabled - Users gain XP</option>
-                            <option value="false">❌ Disabled - No XP gain</option>
-                        </select>
-                        <small>Users gain XP by sending messages. Use <code>/rank</code> to check level</small>
-                    </div>
-                    <div class="setting-group">
-                        <label>🏆 Level Up Role Rewards</label>
-                        <div class="reward-row">
-                            <span>Level 5:</span>
-                            <input type="text" id="rewardRole5" placeholder="Role ID or Name">
-                        </div>
-                        <div class="reward-row">
-                            <span>Level 10:</span>
-                            <input type="text" id="rewardRole10" placeholder="Role ID or Name">
-                        </div>
-                    </div>
-                    <button onclick="saveLeveling()" class="save-btn">💾 Save Leveling Settings</button>
-                </div>
-            </div>
-
-            <!-- Commands Page -->
             <div id="commands" class="page">
-                <h1>📋 Command List</h1>
-                <input type="text" id="commandSearch" placeholder="🔍 Search commands..." class="search-input">
-                <div id="commandsList" class="commands-grid"></div>
+                <h1>Commands</h1>
+                <div class="commands-grid" id="commandsList"></div>
             </div>
         </main>
     </div>
-
     <script src="script.js"></script>
 </body>
-              </html>
+                                                                                             </html>
