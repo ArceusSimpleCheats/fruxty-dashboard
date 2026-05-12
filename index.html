@@ -15,7 +15,7 @@
             align-items: center;
         }
         .login-card {
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0,0,0,0.6);
             backdrop-filter: blur(10px);
             padding: 50px;
             border-radius: 24px;
@@ -49,7 +49,6 @@
             cursor: pointer;
             margin-top: 20px;
         }
-        .error { color: #ff6666; margin-top: 15px; }
     </style>
 </head>
 <body>
@@ -58,39 +57,32 @@
         <h1>FRUXTY</h1>
         <p>Advanced Server Management</p>
         <button class="discord-btn" onclick="login()">Login with Discord</button>
-        <div id="error" class="error"></div>
     </div>
 
     <script>
         const CLIENT_ID = '1503755260814954577';
         const REDIRECT_URI = encodeURIComponent('https://fruxty-dashboard.vercel.app/dashboard');
         
-        // Check if we already have a token
-        const token = localStorage.getItem('fruxty_token');
-        const tokenExpiry = localStorage.getItem('fruxty_token_expiry');
-        
-        if (token && tokenExpiry && Date.now() < parseInt(tokenExpiry)) {
-            // Token exists and is not expired - go to dashboard
-            window.location.href = '/dashboard';
-        }
-        
-        // Check if Discord just redirected back with a token in the URL fragment
+        // --- IMPORTANT: Check if we're returning from Discord ---
+        // Discord adds the token as a URL fragment like #access_token=...
         if (window.location.hash && window.location.hash.includes('access_token')) {
             const hashParams = new URLSearchParams(window.location.hash.substring(1));
             const accessToken = hashParams.get('access_token');
-            const expiresIn = hashParams.get('expires_in');
-            
             if (accessToken) {
-                // Save token and expiry (7 days = 604800 seconds)
+                // Save token to localStorage (no expiry, just store it)
                 localStorage.setItem('fruxty_token', accessToken);
-                localStorage.setItem('fruxty_token_expiry', Date.now() + (parseInt(expiresIn) * 1000));
-                // Redirect to clean dashboard URL (without hash)
+                // Redirect to clean dashboard URL (without the hash)
                 window.location.href = '/dashboard';
             }
         }
         
+        // If already have a token, go to dashboard directly
+        const existingToken = localStorage.getItem('fruxty_token');
+        if (existingToken) {
+            window.location.href = '/dashboard';
+        }
+        
         function login() {
-            // Use implicit grant (token directly in URL fragment)
             const authUrl = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=token&scope=identify%20guilds`;
             window.location.href = authUrl;
         }
