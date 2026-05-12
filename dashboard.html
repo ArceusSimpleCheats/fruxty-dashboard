@@ -5,19 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FRUXTY Dashboard</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="dashboard">
-        <!-- Sidebar -->
         <aside class="sidebar">
-            <div class="sidebar-header">
-                <div class="logo">
-                    <div class="logo-icon">🤖</div>
-                    <div class="logo-text">FRUXTY</div>
-                </div>
-            </div>
-            <nav class="nav-menu">
+            <div class="logo">🤖 FRUXTY</div>
+            <nav class="nav">
                 <a href="#" class="nav-item active" data-page="overview">📊 Overview</a>
                 <a href="#" class="nav-item" data-page="servers">🖥️ My Servers</a>
                 <a href="#" class="nav-item" data-page="automod">🛡️ AutoMod</a>
@@ -25,67 +18,21 @@
                 <a href="#" class="nav-item" data-page="leveling">📈 Leveling</a>
                 <a href="#" class="nav-item" data-page="commands">📋 Commands</a>
             </nav>
-            <div class="sidebar-footer">
-                <div class="user-card">
-                    <img id="userAvatar" class="user-avatar" src="" alt="">
-                    <div class="user-info">
-                        <div id="userName" class="user-name">Loading...</div>
-                        <div id="userDiscrim" class="user-discrim"></div>
-                    </div>
-                    <button onclick="logout()" class="logout-btn">🚪</button>
-                </div>
+            <div class="user-section">
+                <img id="userAvatar" class="user-avatar" src="">
+                <div id="userName" class="user-name">Loading...</div>
+                <button onclick="logout()" class="logout-btn">Logout</button>
             </div>
         </aside>
-
-        <main class="main-content">
-            <div id="overview" class="page active">
-                <h1>Dashboard Overview</h1>
-                <div class="stats-grid">
-                    <div class="stat-card"><div class="stat-value" id="botStatus">🟢 Online</div><div class="stat-label">Bot Status</div></div>
-                    <div class="stat-card"><div class="stat-value" id="serverCount">0</div><div class="stat-label">Servers</div></div>
-                    <div class="stat-card"><div class="stat-value" id="botPing">0ms</div><div class="stat-label">Ping</div></div>
-                </div>
-                <button onclick="refreshData()" class="refresh-btn">🔄 Refresh</button>
-            </div>
-
-            <div id="servers" class="page">
-                <h1>My Servers</h1>
-                <div id="serverList" class="server-grid">Loading...</div>
-            </div>
-
-            <div id="automod" class="page">
-                <h1>AutoMod Configuration</h1>
-                <div id="automodWarning" class="warning">Select a server first</div>
-                <div id="automodSettings" style="display:none">
-                    <label>AutoMod Status</label>
-                    <select id="automodEnabled"><option value="true">Enabled</option><option value="false">Disabled</option></select>
-                    <button onclick="saveAutoMod()" class="save-btn">Save</button>
-                </div>
-            </div>
-
-            <div id="voice" class="page">
-                <h1>Temp Voice</h1>
-                <div id="voiceWarning" class="warning">Select a server first</div>
-                <button onclick="setupVoice()" class="save-btn">Setup Voice</button>
-            </div>
-
-            <div id="leveling" class="page">
-                <h1>Leveling System</h1>
-                <div id="levelingWarning" class="warning">Select a server first</div>
-                <div id="levelingSettings" style="display:none">
-                    <label>Leveling Status</label>
-                    <select id="levelingEnabled"><option value="true">Enabled</option><option value="false">Disabled</option></select>
-                    <button onclick="saveLeveling()" class="save-btn">Save</button>
-                </div>
-            </div>
-
-            <div id="commands" class="page">
-                <h1>Command List</h1>
-                <div class="commands-grid" id="commandsList"></div>
-            </div>
+        <main class="main">
+            <div id="overview" class="page active"><h1>Overview</h1><div id="botStatus">🟢 Online</div></div>
+            <div id="servers" class="page"><h1>My Servers</h1><div id="serverList">Loading...</div></div>
+            <div id="automod" class="page"><h1>AutoMod</h1><div id="automodWarning">Select a server first</div><div id="automodSettings" style="display:none"><select id="automodEnabled"><option value="true">Enabled</option><option value="false">Disabled</option></select><button onclick="saveAutoMod()">Save</button></div></div>
+            <div id="voice" class="page"><h1>Temp Voice</h1><button onclick="setupVoice()">Setup</button></div>
+            <div id="leveling" class="page"><h1>Leveling</h1><div id="levelingWarning">Select a server first</div><div id="levelingSettings" style="display:none"><select id="levelingEnabled"><option value="true">Enabled</option><option value="false">Disabled</option></select><button onclick="saveLeveling()">Save</button></div></div>
+            <div id="commands" class="page"><h1>Commands</h1><div id="commandsList"></div></div>
         </main>
     </div>
-
     <script src="script.js"></script>
 </body>
-                </html>
+    </html>
