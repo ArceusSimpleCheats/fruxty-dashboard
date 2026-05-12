@@ -75,6 +75,14 @@
             padding: 5px 12px;
             border-radius: 20px;
         }
+        .app-info {
+            margin-top: 20px;
+            padding: 10px;
+            background: rgba(255,107,53,0.05);
+            border-radius: 10px;
+            font-size: 11px;
+            color: #666;
+        }
     </style>
 </head>
 <body>
@@ -95,9 +103,13 @@
                 <span class="feature">📈 Leveling</span>
                 <span class="feature">🎁 Giveaways</span>
             </div>
+            <div class="app-info">
+                🆔 Client ID: 1503755260814954577 | 🤖 Bot: Fruxty
+            </div>
         </div>
     </div>
     <script>
+        // CLIENT ID - Identifies your Discord Application (HAS PURPOSE!)
         const CLIENT_ID = '1503755260814954577';
         const REDIRECT_URI = encodeURIComponent('https://fruxty-dashboard.vercel.app/dashboard');
         
@@ -108,6 +120,8 @@
             if (token) {
                 // Save token
                 localStorage.setItem('discord_token', token);
+                // Also store which client ID was used
+                localStorage.setItem('discord_client_id', CLIENT_ID);
                 // Redirect to dashboard without the hash
                 window.location.href = '/dashboard';
             }
@@ -115,15 +129,17 @@
         
         // Check if already logged in
         const savedToken = localStorage.getItem('discord_token');
-        if (savedToken && window.location.pathname !== '/dashboard') {
+        const savedClientId = localStorage.getItem('discord_client_id');
+        if (savedToken && savedClientId === CLIENT_ID && window.location.pathname !== '/dashboard') {
             window.location.href = '/dashboard';
         }
         
         function login() {
             const scope = 'identify guilds';
+            // Client ID is used here to identify which app is requesting access
             const authUrl = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=token&scope=${scope}`;
             window.location.href = authUrl;
         }
     </script>
 </body>
-</html>
+    </html>
