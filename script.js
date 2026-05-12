@@ -1,3 +1,9 @@
+// Check for token immediately
+const token = localStorage.getItem('discord_token');
+if (!token) {
+    window.location.href = '/';
+}
+
 const API_URL = 'https://fruxty.onrender.com';
 let currentToken = null;
 let currentUser = null;
