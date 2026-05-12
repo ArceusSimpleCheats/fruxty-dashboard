@@ -1,29 +1,17 @@
+// ============ FRUXTY DASHBOARD - TOKEN HANDLING ============
 const API_URL = 'https://fruxty.onrender.com';
 const CLIENT_ID = '1503755260814954577';
 
-// Validate token with backend
-async function validateToken() {
-    const token = localStorage.getItem('discord_token');
-    const tokenExpiry = localStorage.getItem('token_expires');
-    
-    if (!token || !tokenExpiry || Date.now() > parseInt(tokenExpiry)) {
-        localStorage.clear();
-        window.location.href = '/';
-        return false;
-    }
-    
-    // Verify token is still valid with Discord
-    try {
-        const res = await fetch(`${API_URL}/api/auth/verify`, {
-            headers: { Authorization: `Bearer ${token}` }
-        });
-        if (!res.ok) throw new Error('Invalid token');
-        return true;
-    } catch(e) {
-        localStorage.clear();
-        window.location.href = '/';
-        return false;
-    }
+// Check for token immediately
+const token = localStorage.getItem('fruxty_token');
+const tokenExpiry = localStorage.getItem('fruxty_token_expiry');
+
+// If no token or token expired, redirect to login
+if (!token || !tokenExpiry || Date.now() > parseInt(tokenExpiry)) {
+    // Clear any stale data
+    localStorage.removeItem('fruxty_token');
+    localStorage.removeItem('fruxty_token_expiry');
+    window.location.href = '/';
 }
 
 let currentUser = null;
@@ -31,9 +19,6 @@ let currentGuilds = [];
 let selectedGuildId = null;
 
 document.addEventListener('DOMContentLoaded', async () => {
-    const isValid = await validateToken();
-    if (!isValid) return;
-    
     await loadUser();
     await loadBotStatus();
     await loadUserGuilds();
@@ -42,48 +27,67 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 async function loadUser() {
-    const token = localStorage.getItem('discord_token');
-    const res = await fetch('https://discord.com/api/users/@me', {
-        headers: { Authorization: `Bearer ${token}` }
-    });
-    if (!res.ok) { logout(); return; }
-    currentUser = await res.json();
-    document.getElementById('userName').innerText = currentUser.username;
-    document.getElementById('userDiscrim').innerText = `#${currentUser.discriminator}`;
-    document.getElementById('userAvatar').src = currentUser.avatar ? `https://cdn.discordapp.com/avatars/${currentUser.id}/${currentUser.avatar}.png` : 'https://cdn.discordapp.com/embed/avatars/0.png';
+    try {
+        const res = await fetch('https://discord.com/api/users/@me', {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        if (!res.ok) throw new Error('Invalid token');
+        currentUser = await res.json();
+        document.getElementById('userName').innerText = currentUser.username;
+        document.getElementById('userDiscrim').innerText = `#${currentUser.discriminator}`;
+        document.getElementById('userAvatar').src = currentUser.avatar 
+            ? `https://cdn.discordapp.com/avatars/${currentUser.id}/${currentUser.avatar}.png`
+            : 'https://cdn.discordapp.com/embed/avatars/0.png';
+    } catch(e) {
+        console.error('User load failed:', e);
+        logout();
+    }
 }
 
 async function loadBotStatus() {
     try {
         const res = await fetch(`${API_URL}/api/status`);
         const data = await res.json();
-        document.getElementById('totalServers').innerText = data.guilds || 0;
-        document.getElementById('serverCountBadge').innerText = data.guilds || 0;
+        document.getElementById('serverCount').innerText = data.guilds || 0;
         document.getElementById('botPing').innerText = `${data.ping || 0}ms`;
-        document.getElementById('totalUsers').innerText = data.users || 0;
     } catch(e) { console.error(e); }
 }
 
 async function loadUserGuilds() {
-    const token = localStorage.getItem('discord_token');
-    const userGuildsRes = await fetch('https://discord.com/api/users/@me/guilds', {
-        headers: { Authorization: `Bearer ${token}` }
-    });
-    const userGuilds = await userGuildsRes.json();
-    const botGuildsRes = await fetch(`${API_URL}/api/guilds`);
-    const botGuilds = await botGuildsRes.json();
-    const botGuildIds = botGuilds.map(g => g.id);
-    currentGuilds = userGuilds.filter(g => g.owner === true && botGuildIds.includes(g.id));
-    renderServerList();
+    try {
+        // Get user's guilds from Discord
+        const userGuildsRes = await fetch('https://discord.com/api/users/@me/guilds', {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        const userGuilds = await userGuildsRes.json();
+        
+        // Get bot's guilds from your API
+        const botGuildsRes = await fetch(`${API_URL}/api/guilds`);
+        const botGuilds = await botGuildsRes.json();
+        const botGuildIds = botGuilds.map(g => g.id);
+        
+        // Filter: user must be OWNER and bot must be in guild
+        currentGuilds = userGuilds.filter(g => g.owner === true && botGuildIds.includes(g.id));
+        renderServerList();
+    } catch(e) {
+        console.error('Failed to load guilds:', e);
+        document.getElementById('serverList').innerHTML = '<div class="warning">Failed to load servers</div>';
+    }
 }
 
 function renderServerList() {
     const container = document.getElementById('serverList');
     if (currentGuilds.length === 0) {
-        container.innerHTML = `<div class="warning-banner">No servers found. <a href="https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&permissions=8&scope=bot%20applications.commands" target="_blank">Invite FRUXTY Bot</a></div>`;
+        container.innerHTML = `<div class="warning">No servers found. <a href="https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&permissions=8&scope=bot%20applications.commands" target="_blank">Invite FRUXTY Bot</a></div>`;
         return;
     }
-    container.innerHTML = currentGuilds.map(g => `<div class="server-card" onclick="selectGuild('${g.id}')"><h3>${g.name}</h3><p>👥 ${g.approximate_member_count || '?'} members</p><p style="color:#FF6B35">👑 Owner</p></div>`).join('');
+    container.innerHTML = currentGuilds.map(g => `
+        <div class="server-card" onclick="selectGuild('${g.id}')">
+            <h3>${g.name}</h3>
+            <p>👥 ${g.approximate_member_count || '?'} members</p>
+            <p style="color:#FF6B35">👑 You own this server</p>
+        </div>
+    `).join('');
 }
 
 window.selectGuild = function(guildId) {
@@ -97,15 +101,17 @@ window.selectGuild = function(guildId) {
 };
 
 async function loadGuildSettings(guildId) {
-    const res = await fetch(`${API_URL}/api/guilds/${guildId}/settings`);
-    const settings = await res.json();
-    if (document.getElementById('automodEnabled')) document.getElementById('automodEnabled').checked = settings.automod?.enabled || false;
-    if (document.getElementById('levelingEnabled')) document.getElementById('levelingEnabled').checked = settings.leveling?.enabled || false;
+    try {
+        const res = await fetch(`${API_URL}/api/guilds/${guildId}/settings`);
+        const settings = await res.json();
+        document.getElementById('automodEnabled').value = settings.automod?.enabled !== false ? 'true' : 'false';
+        document.getElementById('levelingEnabled').value = settings.leveling?.enabled !== false ? 'true' : 'false';
+    } catch(e) { console.error(e); }
 }
 
 window.saveAutoMod = async function() {
     if (!selectedGuildId) { showToast('Select a server first!', 'error'); return; }
-    const enabled = document.getElementById('automodEnabled').checked;
+    const enabled = document.getElementById('automodEnabled').value === 'true';
     await fetch(`${API_URL}/api/guilds/${selectedGuildId}/settings`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -116,7 +122,7 @@ window.saveAutoMod = async function() {
 
 window.saveLeveling = async function() {
     if (!selectedGuildId) { showToast('Select a server first!', 'error'); return; }
-    const enabled = document.getElementById('levelingEnabled').checked;
+    const enabled = document.getElementById('levelingEnabled').value === 'true';
     await fetch(`${API_URL}/api/guilds/${selectedGuildId}/settings`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -125,18 +131,19 @@ window.saveLeveling = async function() {
     showToast('✅ Leveling saved!', 'success');
 };
 
-window.setupVoice = () => showToast('Run /setup-voice in Discord', 'info');
-window.refreshData = async () => { await loadBotStatus(); await loadUserGuilds(); showToast('Refreshed!', 'success'); };
+window.setupVoice = function() {
+    showToast('Run /setup-voice in Discord', 'info');
+};
+
+window.refreshData = async function() {
+    await loadBotStatus();
+    await loadUserGuilds();
+    showToast('Refreshed!', 'success');
+};
 
 function loadCommands() {
-    const cmds = ['/ping', '/serverinfo', '/userinfo', '/avatar', '/botinfo', '/help', '/rank', '/leaderboard', '/setup', '/setup-voice', '/setup-verify', '/automod', '/ban', '/kick', '/timeout', '/warn', '/purge', '/vc rename', '/vc lock', '/verify'];
-    document.getElementById('commandsList').innerHTML = cmds.map(c => `<div class="command-card">${c}</div>`).join('');
-    document.getElementById('commandSearch')?.addEventListener('input', (e) => {
-        const term = e.target.value.toLowerCase();
-        document.querySelectorAll('.command-card').forEach(card => {
-            card.style.display = card.textContent.toLowerCase().includes(term) ? 'block' : 'none';
-        });
-    });
+    const commands = ['/ping', '/serverinfo', '/userinfo', '/avatar', '/botinfo', '/help', '/rank', '/leaderboard', '/setup', '/setup-voice', '/setup-verify', '/automod', '/ban', '/kick', '/timeout', '/warn', '/purge', '/vc rename', '/vc lock', '/verify'];
+    document.getElementById('commandsList').innerHTML = commands.map(c => `<div class="command-card">${c}</div>`).join('');
 }
 
 function setupNavigation() {
@@ -155,9 +162,13 @@ function setupNavigation() {
 function showToast(msg, type) {
     const toast = document.createElement('div');
     toast.innerText = msg;
-    toast.style.cssText = `position:fixed;bottom:20px;right:20px;background:${type === 'success' ? '#00cc66' : '#FF6B35'};color:white;padding:12px 20px;border-radius:10px;z-index:1000;`;
+    toast.style.cssText = `position:fixed;bottom:20px;right:20px;background:${type === 'success' ? '#00cc66' : '#FF6B35'};color:white;padding:12px 20px;border-radius:8px;z-index:1000;`;
     document.body.appendChild(toast);
     setTimeout(() => toast.remove(), 3000);
 }
 
-window.logout = () => { localStorage.clear(); window.location.href = '/'; };
+window.logout = function() {
+    localStorage.removeItem('fruxty_token');
+    localStorage.removeItem('fruxty_token_expiry');
+    window.location.href = '/';
+};
