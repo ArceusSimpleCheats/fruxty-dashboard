@@ -9,6 +9,7 @@
 </head>
 <body>
     <div class="dashboard">
+        <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-header">
                 <div class="logo">
@@ -17,46 +18,74 @@
                 </div>
             </div>
             <nav class="nav-menu">
-                <a href="#" class="nav-item active" data-page="overview"><span class="nav-icon">📊</span><span>Overview</span></a>
-                <a href="#" class="nav-item" data-page="servers"><span class="nav-icon">🖥️</span><span>My Servers</span><span class="nav-count" id="serverCountBadge">0</span></a>
-                <a href="#" class="nav-item" data-page="automod"><span class="nav-icon">🛡️</span><span>AutoMod</span></a>
-                <a href="#" class="nav-item" data-page="voice"><span class="nav-icon">🎤</span><span>Temp Voice</span></a>
-                <a href="#" class="nav-item" data-page="leveling"><span class="nav-icon">📈</span><span>Leveling</span></a>
-                <a href="#" class="nav-item" data-page="commands"><span class="nav-icon">📋</span><span>Commands</span></a>
+                <a href="#" class="nav-item active" data-page="overview">📊 Overview</a>
+                <a href="#" class="nav-item" data-page="servers">🖥️ My Servers</a>
+                <a href="#" class="nav-item" data-page="automod">🛡️ AutoMod</a>
+                <a href="#" class="nav-item" data-page="voice">🎤 Temp Voice</a>
+                <a href="#" class="nav-item" data-page="leveling">📈 Leveling</a>
+                <a href="#" class="nav-item" data-page="commands">📋 Commands</a>
             </nav>
             <div class="sidebar-footer">
-                <div class="bot-status"><div class="status-indicator online"></div><div class="status-text">FRUXTY Online</div></div>
                 <div class="user-card">
                     <img id="userAvatar" class="user-avatar" src="" alt="">
-                    <div class="user-info"><div id="userName" class="user-name">Loading...</div><div id="userDiscrim" class="user-discrim"></div></div>
-                    <button onclick="logout()" class="logout-icon">🚪</button>
+                    <div class="user-info">
+                        <div id="userName" class="user-name">Loading...</div>
+                        <div id="userDiscrim" class="user-discrim"></div>
+                    </div>
+                    <button onclick="logout()" class="logout-btn">🚪</button>
                 </div>
             </div>
         </aside>
 
         <main class="main-content">
             <div id="overview" class="page active">
-                <div class="page-header"><h1>Dashboard Overview</h1><p>Welcome back! Here's what's happening.</p></div>
+                <h1>Dashboard Overview</h1>
                 <div class="stats-grid">
-                    <div class="stat-card"><div class="stat-icon">🟢</div><div class="stat-details"><div class="stat-value" id="botStatus">Online</div><div class="stat-label">Bot Status</div></div></div>
-                    <div class="stat-card"><div class="stat-icon">🖥️</div><div class="stat-details"><div class="stat-value" id="totalServers">0</div><div class="stat-label">Total Servers</div></div></div>
-                    <div class="stat-card"><div class="stat-icon">👥</div><div class="stat-details"><div class="stat-value" id="totalUsers">0</div><div class="stat-label">Total Users</div></div></div>
-                    <div class="stat-card"><div class="stat-icon">🏓</div><div class="stat-details"><div class="stat-value" id="botPing">0ms</div><div class="stat-label">Latency</div></div></div>
+                    <div class="stat-card"><div class="stat-value" id="botStatus">🟢 Online</div><div class="stat-label">Bot Status</div></div>
+                    <div class="stat-card"><div class="stat-value" id="serverCount">0</div><div class="stat-label">Servers</div></div>
+                    <div class="stat-card"><div class="stat-value" id="botPing">0ms</div><div class="stat-label">Ping</div></div>
                 </div>
-                <div class="quick-actions"><h3>⚡ Quick Actions</h3><div class="action-grid"><button onclick="refreshData()" class="action-card"><span class="action-icon">🔄</span><span>Refresh Data</span></button></div></div>
+                <button onclick="refreshData()" class="refresh-btn">🔄 Refresh</button>
             </div>
 
-            <div id="servers" class="page"><div class="page-header"><h1>My Servers</h1><p>Servers you own with FRUXTY Bot.</p></div><div id="serverList" class="server-grid"><div class="loading-spinner">Loading...</div></div></div>
+            <div id="servers" class="page">
+                <h1>My Servers</h1>
+                <div id="serverList" class="server-grid">Loading...</div>
+            </div>
 
-            <div id="automod" class="page"><div class="page-header"><h1>🛡️ AutoMod</h1></div><div id="automodWarning" class="warning-banner">⚠️ Select a server first</div><div id="automodSettings" style="display:none"><div class="settings-card"><div class="setting-item"><div class="setting-info"><label>AutoMod Status</label></div><label class="toggle-switch"><input type="checkbox" id="automodEnabled"><span class="toggle-slider"></span></label></div><button onclick="saveAutoMod()" class="save-btn">Save</button></div></div></div>
+            <div id="automod" class="page">
+                <h1>AutoMod Configuration</h1>
+                <div id="automodWarning" class="warning">Select a server first</div>
+                <div id="automodSettings" style="display:none">
+                    <label>AutoMod Status</label>
+                    <select id="automodEnabled"><option value="true">Enabled</option><option value="false">Disabled</option></select>
+                    <button onclick="saveAutoMod()" class="save-btn">Save</button>
+                </div>
+            </div>
 
-            <div id="voice" class="page"><div class="page-header"><h1>🎤 Temp Voice</h1></div><div id="voiceWarning" class="warning-banner">⚠️ Select a server first</div><button onclick="setupVoice()" class="save-btn">Setup Voice System</button></div>
+            <div id="voice" class="page">
+                <h1>Temp Voice</h1>
+                <div id="voiceWarning" class="warning">Select a server first</div>
+                <button onclick="setupVoice()" class="save-btn">Setup Voice</button>
+            </div>
 
-            <div id="leveling" class="page"><div class="page-header"><h1>📈 Leveling</h1></div><div id="levelingWarning" class="warning-banner">⚠️ Select a server first</div><div id="levelingSettings" style="display:none"><div class="settings-card"><div class="setting-item"><div class="setting-info"><label>Leveling Status</label></div><label class="toggle-switch"><input type="checkbox" id="levelingEnabled"><span class="toggle-slider"></span></label></div><button onclick="saveLeveling()" class="save-btn">Save</button></div></div></div>
+            <div id="leveling" class="page">
+                <h1>Leveling System</h1>
+                <div id="levelingWarning" class="warning">Select a server first</div>
+                <div id="levelingSettings" style="display:none">
+                    <label>Leveling Status</label>
+                    <select id="levelingEnabled"><option value="true">Enabled</option><option value="false">Disabled</option></select>
+                    <button onclick="saveLeveling()" class="save-btn">Save</button>
+                </div>
+            </div>
 
-            <div id="commands" class="page"><div class="page-header"><h1>📋 Commands</h1></div><div class="search-box"><span class="search-icon">🔍</span><input type="text" id="commandSearch" placeholder="Search commands..."></div><div class="commands-grid" id="commandsList"></div></div>
+            <div id="commands" class="page">
+                <h1>Command List</h1>
+                <div class="commands-grid" id="commandsList"></div>
+            </div>
         </main>
     </div>
+
     <script src="script.js"></script>
 </body>
-                                                                                                                                                                             </html>
+                </html>
