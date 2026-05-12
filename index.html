@@ -33,7 +33,6 @@
             justify-content: center;
             font-size: 50px;
             margin: 0 auto 20px;
-            box-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
         }
         h1 { 
             font-size: 36px;
@@ -41,7 +40,6 @@
             background: linear-gradient(135deg, #FF6B35, #F7931E);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            letter-spacing: 2px;
             margin-bottom: 10px;
         }
         p { color: #ccc; margin-bottom: 30px; }
@@ -56,14 +54,10 @@
             text-decoration: none;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
             border: none;
             font-size: 16px;
         }
-        .discord-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(88, 101, 242, 0.4);
-        }
+        .discord-btn:hover { transform: translateY(-2px); }
         .features {
             margin-top: 30px;
             display: flex;
@@ -78,6 +72,7 @@
             padding: 5px 12px;
             border-radius: 20px;
         }
+        .error-msg { color: #ff6666; margin-top: 15px; font-size: 14px; }
     </style>
 </head>
 <body>
@@ -86,45 +81,62 @@
             <div class="bot-icon">🤖</div>
             <h1>FRUXTY</h1>
             <p>Advanced Server Management Dashboard</p>
-            <a href="#" onclick="login()" class="discord-btn">
+            <button onclick="login()" class="discord-btn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
-                    <path d="M20.317 4.3698a19.7913 19.7913 0 0 0-4.8851-1.5152.0741.0741 0 0 0-.0785.0371c-.2102.3733-.4443.8645-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1639-.385-.4074-.8762-.6178-1.2495a.077.077 0 0 0-.0785-.037 19.7363 19.7363 0 0 0-4.8852 1.515.0699.0699 0 0 0-.0321.0277C.5334 8.0458-.319 13.5799.0992 18.0578a.0824.0824 0 0 0 .0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 0 0 .0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 0 0-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 0 1-.0076-.1275c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 0 1 .0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 0 1 .0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 0 1-.0066.1276 12.2986 12.2986 0 0 1-1.873.8918.0766.0766 0 0 0-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 0 0 .0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 0 0 .0313-.0552c.5004-5.177-.8387-10.6739-3.5485-15.2276a.0722.0722 0 0 0-.0312-.0277zM8.5204 15.2453c-1.2203 0-2.2263-1.1186-2.2263-2.4866 0-1.368.9825-2.4865 2.2263-2.4865 1.252 0 2.2498 1.1186 2.2263 2.4865 0 1.368-.9743 2.4866-2.2263 2.4866zm6.9592 0c-1.2203 0-2.2263-1.1186-2.2263-2.4866 0-1.368.9825-2.4865 2.2263-2.4865 1.252 0 2.2498 1.1186 2.2263 2.4865 0 1.368-.9743 2.4866-2.2263 2.4866z"/>
+                    <path d="M20.317 4.3698a19.7913 19.7913 0 0 0-4.8851-1.5152.0741.0741 0 0 0-.0785.0371c-.2102.3733-.4443.8645-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1639-.385-.4074-.8762-.6178-1.2495a.077.077 0 0 0-.0785-.037 19.7363 19.7363 0 0 0-4.8852 1.515.0699.0699 0 0 0-.0321.0277C.5334 8.0458-.319 13.5799.0992 18.0578a.0824.0824 0 0 0 .0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 0 0 .0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 0 0-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 0 1-.0076-.1275c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 0 1 .0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 0 1 .0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 0 1-.0066.1276 12.2986 12.2986 0 0 1-1.873.8918.0766.0766 0 0 0-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 0 0 .0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 0 0 .0313-.0552c.5004-5.177-.8387-10.6739-3.5485-15.2276a.0722.0722 0 0 0-.0312-.0277z"/>
                 </svg>
                 Login with Discord
-            </a>
+            </button>
             <div class="features">
                 <span class="feature">🛡️ AutoMod</span>
                 <span class="feature">🎤 Temp Voice</span>
                 <span class="feature">📈 Leveling</span>
                 <span class="feature">🎁 Giveaways</span>
             </div>
+            <div id="errorMsg" class="error-msg"></div>
         </div>
     </div>
     <script>
+        const API_URL = 'https://fruxty.onrender.com';
         const CLIENT_ID = '1503755260814954577';
         const REDIRECT_URI = encodeURIComponent('https://fruxty-dashboard.vercel.app/dashboard');
         
+        // Check for auth code after redirect
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+        
+        if (code) {
+            // Exchange code for token using your backend
+            fetch(`${API_URL}/api/auth/token`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ code })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.access_token) {
+                    localStorage.setItem('discord_token', data.access_token);
+                    localStorage.setItem('discord_refresh_token', data.refresh_token);
+                    localStorage.setItem('token_expires', Date.now() + (data.expires_in * 1000));
+                    window.location.href = '/dashboard';
+                } else {
+                    document.getElementById('errorMsg').innerText = 'Login failed. Please try again.';
+                }
+            })
+            .catch(err => {
+                document.getElementById('errorMsg').innerText = 'Network error. Is bot running?';
+            });
+        }
+        
         // Check existing session
-        const savedToken = localStorage.getItem('discord_token');
-        const tokenExpiry = localStorage.getItem('discord_token_expiry');
-        if (savedToken && tokenExpiry && Date.now() < parseInt(tokenExpiry)) {
+        const token = localStorage.getItem('discord_token');
+        const tokenExpiry = localStorage.getItem('token_expires');
+        if (token && tokenExpiry && Date.now() < parseInt(tokenExpiry)) {
             window.location.href = '/dashboard';
         }
         
-        // Handle OAuth callback
-        if (window.location.hash && window.location.hash.includes('access_token')) {
-            const hashParams = new URLSearchParams(window.location.hash.substring(1));
-            const token = hashParams.get('access_token');
-            const expiresIn = hashParams.get('expires_in');
-            if (token) {
-                localStorage.setItem('discord_token', token);
-                localStorage.setItem('discord_token_expiry', Date.now() + (parseInt(expiresIn) * 1000));
-                window.location.href = '/dashboard';
-            }
-        }
-        
         function login() {
-            const authUrl = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=token&scope=identify%20guilds`;
+            const authUrl = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=identify%20guilds`;
             window.location.href = authUrl;
         }
     </script>
