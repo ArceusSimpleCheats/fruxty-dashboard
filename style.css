@@ -1,17 +1,19 @@
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family: system-ui, sans-serif; background:#0a0a0a; color:white; }
-.dashboard { display:flex; }
-.sidebar { width:250px; background:#111; min-height:100vh; padding:20px; }
-.logo { font-size:24px; font-weight:bold; color:#FF6B35; margin-bottom:30px; }
-.nav-item { display:block; padding:10px; color:#aaa; text-decoration:none; margin-bottom:5px; border-radius:8px; cursor:pointer; }
+.dashboard { display:flex; min-height:100vh; }
+.sidebar { width:260px; background:#111; border-right:1px solid #222; display:flex; flex-direction:column; }
+.logo { padding:20px; font-size:24px; font-weight:bold; text-align:center; color:#FF6B35; }
+.nav-item { display:block; padding:12px 20px; color:#aaa; text-decoration:none; cursor:pointer; }
 .nav-item.active, .nav-item:hover { background:#FF6B35; color:white; }
-.user-section { margin-top:30px; display:flex; align-items:center; gap:10px; }
-.user-avatar { width:40px; height:40px; border-radius:50%; }
-.logout-btn { background:#ff4444; border:none; padding:5px 10px; border-radius:5px; cursor:pointer; }
-.main { flex:1; padding:20px; }
+.user-info { margin-top:auto; padding:20px; display:flex; align-items:center; gap:10px; border-top:1px solid #222; }
+.avatar { width:40px; height:40px; border-radius:50%; }
+.logout-btn { background:#ff4444; border:none; padding:5px 10px; border-radius:6px; cursor:pointer; }
+.content { flex:1; padding:30px; }
 .page { display:none; }
 .page.active { display:block; }
-.server-card { background:#111; padding:15px; border-radius:10px; margin-bottom:10px; cursor:pointer; border:1px solid #222; }
+.server-card { background:#111; border:1px solid #222; border-radius:12px; padding:15px; margin-bottom:10px; cursor:pointer; }
 .server-card:hover { border-color:#FF6B35; }
-.warning { color:#FF6B35; margin-bottom:10px; }
-.command-card { background:#111; display:inline-block; padding:8px 12px; margin:5px; border-radius:8px; font-family:monospace; }
+.warning { color:#FF6B35; margin-bottom:15px; }
+.command-card { background:#1a1a1a; display:inline-block; padding:8px 14px; margin:5px; border-radius:20px; font-family:monospace; }
+button { background:#FF6B35; border:none; padding:8px 16px; border-radius:8px; cursor:pointer; margin-top:10px; }
+select { background:#1a1a1a; color:white; padding:8px; border-radius:6px; margin-right:10px; }
